@@ -1,7 +1,7 @@
 import * as jsim from "./jsimg.ts"
 import * as md from "./mermaid.ts"
 import * as fs from "node:fs"
-export type NodeKind = "sink" | "source" | "join" | "fork" | "router" | "semaphore" | "scaler" | "delay" | "queue";
+export type NodeKind = "sink" | "source" | "join" | "fork" | "router" | "semaphore" | "scaler" | "delay" | "queue" | "switch";
 interface IndexDef {
   name: string;                 // label shown in the Excel
   scope: "station" | "system";
@@ -16,7 +16,7 @@ export function nodeKind(node: md.MdNode): NodeKind {
       if (node.isSource()) {
             return "source";
       }
-      for (const k of ["join", "fork", "router", "semaphore", "scaler", "delay"] as const) {
+      for (const k of ["join", "fork", "router", "semaphore", "scaler", "delay", "switch"] as const) {
             if (l.includes(k)) {
                   return k;
             }
@@ -35,6 +35,7 @@ export function mermaidNodeToJsim(node: md.MdNode) {
       map.set('scaler', jsim.Scaler)
       map.set('delay', jsim.Delay)
       map.set('queue', jsim.Queue)
+      map.set('switch', jsim.Switch)
       const constructor = map.get(nodeKind(node))!;
       return new constructor().setName(node.label);
 }

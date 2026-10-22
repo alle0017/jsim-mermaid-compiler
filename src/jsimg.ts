@@ -323,6 +323,29 @@ class ScalerNode extends SimulationNode {
       }
 }
 
+class SwitchNode extends SimulationNode {
+      public override toString(): string {
+            return `
+            <node name="${this.name}">
+                  <section className="Queue">
+                        <parameter classPath="java.lang.Integer" name="size">
+                              <value>-1</value>
+                        </parameter>
+                        <parameter array="true" classPath="java.lang.String" name="dropStrategies"/>
+                        <parameter classPath="jmt.engine.NetStrategies.QueueGetStrategies.FCFSstrategy" name="FCFSstrategy"/>
+                        <parameter array="true" classPath="jmt.engine.NetStrategies.QueuePutStrategy" name="QueuePutStrategy"/>
+                  </section>
+                  <section className="ClassSwitch">
+                        <parameter array="true" classPath="java.lang.Object" name="matrix"/>
+                  </section>
+                  <section className="Router">
+                        <parameter array="true" classPath="jmt.engine.NetStrategies.RoutingStrategy" name="RoutingStrategy"/>
+                  </section>
+            </node>
+            `
+      }
+}
+
 class ArrowModel extends JsimLeaf {
       constructor(public start: string, public end: string) { super() }
       public toString(): string {
@@ -392,6 +415,9 @@ export class Semaphore extends Node {
 }
 export class Router extends Node {
       model: SimulationNode = new RouterNode;
+}
+export class Switch extends Node {
+      model: SimulationNode = new SwitchNode;
 }
 export class JsimContext {
       public readonly document: Document;
